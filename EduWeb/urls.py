@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 import xadmin
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
+    # 调用TemplateView类的as_view方法，会自动转化一个view的函数过来，并在template_name参数指定文件即可，不用自己写一个view类
+    path("", TemplateView.as_view(template_name="index.html"), name="index"),
+    path("login/", TemplateView.as_view(template_name="login.html"), name="login"),
 ]
