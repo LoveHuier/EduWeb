@@ -24,6 +24,11 @@ class CustomBackend(ModelBackend):
             return None
 
 
+class RegisterView(View):
+    def get(self, request):
+        return render(request, 'register.html', {})
+
+
 class LoginView(View):
     # 一般只用定义get/post这个方法，django会自动判断调用get/post
     def get(self, request):
