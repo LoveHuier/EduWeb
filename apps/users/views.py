@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from .models import UserProfile
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 # Create your views here.
@@ -26,7 +26,13 @@ class CustomBackend(ModelBackend):
 
 class RegisterView(View):
     def get(self, request):
-        return render(request, 'register.html', {})
+        register_form = RegisterForm()
+        return render(request, 'register.html', {"register_form": register_form})
+
+    def post(self, request):
+        register_form = RegisterForm()
+        if register_form.is_valid():
+            pass
 
 
 class LoginView(View):
