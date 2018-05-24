@@ -30,9 +30,9 @@ class RegisterView(View):
         return render(request, 'register.html', {"register_form": register_form})
 
     def post(self, request):
-        register_form = RegisterForm()
+        register_form = RegisterForm(request.POST)
         if register_form.is_valid():
-            pass
+            return render(request, "login.html")
 
 
 class LoginView(View):
