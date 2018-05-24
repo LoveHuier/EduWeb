@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from .models import UserProfile
+from .forms import LoginForm
 
 
 # Create your views here.
@@ -29,16 +30,17 @@ class LoginView(View):
         return render(request, "login.html", {})
 
     def post(self, request):
-        user_name = request.POST.get("username", "")
-        pass_word = request.POST.get("password", "")
-        user = authenticate(username=user_name, password=pass_word)
-        if user is not None:
-            login(request, user)
-            return render(request, "index.html")
+        # 这里LoginForm会对应验证相关的username/password
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            user_name = request.POST.get("username", "")
+            pass_word = request.POST.get("password", "")
+            user = authenticate(username=user_name, password=pass_word)
+            if user is not None:
+                login(request, user)
+                return render(request, "index.html", {"msg": "用户名或密码错误！"})
         else:
-            return render(request, "login.html", {"msg": "用户名或密码错误！",
-                                                  "username": user_name,
-                                                  "password": pass_word})
+            return render(request, "login.html", {"login_form": login_form})
 
 
 def user_login(request):
