@@ -48,7 +48,10 @@ class RegisterView(View):
 
             # 发送激活邮件
             send_register_email(user_name, "register")
-            pass
+
+            return render(request, 'login.html')
+        else:
+            return render(request, "register.html", {"register_form": register_form})
 
 
 class LoginView(View):
