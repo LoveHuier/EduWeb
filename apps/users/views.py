@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import make_password
 
 from .models import UserProfile
 from .forms import LoginForm, RegisterForm
+from utils.email_send import send_register_email
 
 
 # Create your views here.
@@ -44,7 +45,10 @@ class RegisterView(View):
             user_profile.password = make_password(pass_word)
 
             user_profile.save()
-            return render(request, "login.html")
+
+            # 发送激活邮件
+            send_register_email(user_name, "register")
+            pass
 
 
 class LoginView(View):
