@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 import xadmin
 
-from users.views import LoginView, RegisterView
+from users.views import LoginView, RegisterView, ActiveUserView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -30,4 +30,6 @@ urlpatterns = [
 
     # 验证码
     path("captcha/", include('captcha.urls')),
+
+    path("active/<str:active_code>/", ActiveUserView.as_view(), name="active"),
 ]
