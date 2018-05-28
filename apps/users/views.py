@@ -121,4 +121,26 @@ class ForgetPwdView(View):
         return render(request, "forgetpwd.html", {"forget_form": forget_form})
 
     def post(self, request):
-        pass
+        forget_form = ForgetForm(request.POST)
+        if forget_form.is_valid():
+            email = request.POST.get("email", "")
+            # 发送邮件
+            send_register_email(email, send_type="forget")
+            return render(request, "send_success.html")
+        else:
+            return render(request, "forgetpwd.html", {"forget_form": forget_form})
+
+
+class ResetView(View):
+    def get(self, request, reset_code):
+        all_records = EmailVerifyRecord.objects.filter(code=reset_code)
+        if all_records:
+            for record in all_records:
+                email = record.email
+                user = UserProfile.objects.get(email=email)
+                # 激活账号
+                user.is_active = True
+                user.save()
+        else:
+            return render(request, "active_fail.html")
+        return render(request, "login.html")

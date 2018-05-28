@@ -38,3 +38,11 @@ def send_register_email(email, send_type="register"):
 
         if send_status:
             pass
+    elif send_type == "forget":
+        email_title = "自学网密码重置链接"
+        email_body = "请点击下面的链接重置密码：http://127.0.0.1:8000/reset/{code}".format(code=code)
+
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+
+        if send_status:
+            pass
