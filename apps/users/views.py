@@ -10,7 +10,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ForgetForm
 from utils.email_send import send_register_email
 
 
@@ -113,3 +113,12 @@ def user_login(request):
                                                   "password": pass_word})
     elif request.method == "GET":
         return render(request, "login.html", {})
+
+
+class ForgetPwdView(View):
+    def get(self, request):
+        forget_form = ForgetForm()
+        return render(request, "forgetpwd.html", {"forget_form": forget_form})
+
+    def post(self, request):
+        pass
