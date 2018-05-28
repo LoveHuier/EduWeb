@@ -10,7 +10,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from utils.email_send import send_register_email
 
 
@@ -137,10 +137,23 @@ class ResetView(View):
         if all_records:
             for record in all_records:
                 email = record.email
-                user = UserProfile.objects.get(email=email)
-                # 激活账号
-                user.is_active = True
-                user.save()
+                return render(request, "password_reset.html", {"email": email})
+
+
+class ModifyPwdView(View):
+    def post(self, request):
+        modify_form = ModifyPwdForm(request.POST)
+        if modify_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            pwd2 = request.POST.get("password2", "")
+            email = request.POST.get("email", "")
+            if pwd1 != pwd2:
+                return render(request, "password_reset.html", {"email": email, "msg": "密码不一致！"})
+            user = UserProfile.objects.get(email=email)
+            user.password = make_password(pwd2)
+            user.save()
+
+            return render(request, "login.html")
         else:
-            return render(request, "active_fail.html")
-        return render(request, "login.html")
+            email = request.POST.get("email", "")
+            return render(request, "password_reset.html", {"email": email, "msg": ""})
