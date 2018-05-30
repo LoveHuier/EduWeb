@@ -21,6 +21,8 @@ class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name=u"机构名称")
     desc = models.TextField(verbose_name=u"机构描述")
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
+    students = models.IntegerField(default=0, verbose_name=u"学习人数")
+    course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
     fav_nums = models.IntegerField(default=0, verbose_name=u"收藏数")
     category = models.CharField(max_length=20, verbose_name=u"机构类别", default="pxjg",
                                 choices=(("pxjg", u"培训机构"), ("gr", u"个人"), ("gx", u"高校")))

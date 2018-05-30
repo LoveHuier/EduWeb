@@ -30,6 +30,13 @@ class OrgView(View):
         if category:
             all_orgs = all_orgs.filter(category=category)
 
+        # 机构排序
+        sort = request.GET.get("sort", "")
+        if sort == "students":
+            all_orgs = all_orgs.order_by("-students")
+        elif sort == "courses":
+            all_orgs = all_orgs.order_by("-course_nums")
+
         org_nums = all_orgs.count()
 
         # 对课程机构进行分页
@@ -49,4 +56,5 @@ class OrgView(View):
             "city_id": city_id,
             "category": category,
             "hot_orgs": hot_orgs,
+            "sort": sort,
         })
