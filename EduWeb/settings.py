@@ -146,3 +146,7 @@ EMAIL_HOST_PASSWORD = "545462004GYP"
 EMAIL_USE_TLS = False
 # 发件人一般与EMAIL_HOST_USER相同，不然会出错
 EMAIL_FROM = "gaoyp_1@sina.com"
+
+# 配置资源文件的存取地址(根目录)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
