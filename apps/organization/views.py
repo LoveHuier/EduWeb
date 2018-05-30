@@ -17,6 +17,9 @@ class OrgView(View):
         all_orgs = CourseOrg.objects.all()
         all_citys = CityDict.objects.all()
 
+        # 热门机构(top3),order_by django的orm功能
+        hot_orgs = all_orgs.order_by("-click_nums")[:3]
+
         # 城市筛选功能
         city_id = request.GET.get("city", "")
         if city_id:
@@ -26,7 +29,7 @@ class OrgView(View):
         category = request.GET.get("ct", "")
         if category:
             all_orgs = all_orgs.filter(category=category)
-            
+
         org_nums = all_orgs.count()
 
         # 对课程机构进行分页
@@ -45,4 +48,5 @@ class OrgView(View):
             "org_nums": org_nums,
             "city_id": city_id,
             "category": category,
+            "hot_orgs": hot_orgs,
         })
