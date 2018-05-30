@@ -20,6 +20,8 @@ import xadmin
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
 from organization.views import OrgView
+from EduWeb.settings import MEDIA_ROOT, MEDIA_URL
+from django.conf.urls.static import static
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -41,3 +43,5 @@ urlpatterns = [
     # 课程机构
     path("org_list/", OrgView.as_view(), name="org_list"),
 ]
+# 配置上传文件的访问显示
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
