@@ -1,5 +1,6 @@
 # _*_coding: utf-8_*_
 
+import re
 from django import forms
 
 from operation.models import UserAsk
@@ -19,7 +20,15 @@ class UserAskForm(forms.ModelForm):
         # 指明要用到的字段，也可以不指明
         fields = ["name", "mobile", "course_name"]
 
+    # 对字段做自定义验证，方法名必须以clean开头;初始化form的时候，自动调用clean_mobile方法
+    def clean_mobile(self):
+        # 利用form的内置变量cleaned_data(它是字典类型)，取出form中的数据
+        mobile = self.cleaned_data["mobile"]
 
-"""
-ModelForm不只是继承简单，而且可以像model一样调用save()保存修改过后的数据，save的时候实际上调用的是model的save。
-"""
+        REGEX_MOBILE = '^1[3578]\d{9}$'
+        p = re.compile(REGEX_MOBILE)
+        if p.match(mobile):
+            return mobile
+        else:
+            # 用raise抛出异常
+            raise forms.ValidationError(u"手机号码非法", code="mobile_invalid")

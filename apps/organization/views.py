@@ -23,10 +23,9 @@ class AddUserAskView(View):
             # 设置commit=True,调用save之后，保存到数据库；若不设置或设置为False，不提交到数据库。
             userask = userask_form.save(commit=True)
 
-            return HttpResponse("{'status':'success'}", content_type="application/json")
+            return HttpResponse('{"status":"success"}', content_type='application/json')
         else:
-            return HttpResponse("{'status':'fail','msg':'{0}'}".format(userask_form.errors),
-                                content_type="application/json")
+            return HttpResponse('{"status":"fail", "msg":"添加出错"}', content_type='application/json')
 
 
 class OrgView(View):
