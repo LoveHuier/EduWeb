@@ -16,17 +16,12 @@ class AddUserAskView(View):
     """
 
     def post(self, request):
-        name = request.POST.get("name", "")
-        mobile = request.POST.get("mobile", "")
-        course_name = request.POST.get("course_name", "")
         userask_form = UserAskForm(request.POST)
         if userask_form.is_valid():
+            mobile = request.POST.get("mobile", "")
             # modelform调用save方法后，返回一个model类
             # 设置commit=True,调用save之后，保存到数据库；若不设置或设置为False，不提交到数据库。
             userask = userask_form.save(commit=True)
-            userask_form.name = name
-            userask_form.mobile = mobile
-            userask_form.course_name = course_name
 
             return HttpResponse("{'status':'success'}", content_type="application/json")
         else:
