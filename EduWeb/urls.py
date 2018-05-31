@@ -40,8 +40,8 @@ urlpatterns = [
     path("reset/<str:reset_code>/", ResetView.as_view(), name="reset_pwd"),
     path("modify_pwd/", ModifyPwdView.as_view(), name="modify_pwd"),
 
-    # 课程机构
-    path("org_list/", OrgView.as_view(), name="org_list"),
+    # 课程机构url配置，以org开关的都会去organization.urls中找
+    path("org/", include('organization.urls', namespace="org"))
 ]
 # 配置上传文件的访问显示
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
