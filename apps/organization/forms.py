@@ -5,13 +5,13 @@ from django import forms
 from operation.models import UserAsk
 
 
-class UserAskForm(forms.Form):
-    name = forms.CharField(required=True, min_length=2, max_length=20)
-    phone = forms.CharField(required=True, min_length=11, max_length=11)
-    course_name = forms.CharField(required=True, min_length=5, max_length=50)
+# class UserAskForm(forms.Form):
+#     name = forms.CharField(required=True, min_length=2, max_length=20)
+#     phone = forms.CharField(required=True, min_length=11, max_length=11)
+#     course_name = forms.CharField(required=True, min_length=5, max_length=50)
 
 
-class AnotherUserForm(forms.ModelForm):
+class UserAskForm(forms.ModelForm):
     # 还可以定义字段
     class Meta:
         # 指明modelform是由哪个model转化的

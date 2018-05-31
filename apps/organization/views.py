@@ -1,11 +1,37 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
 from .models import CourseOrg, CityDict
+from .forms import UserAskForm
 
 
 # Create your views here.
+
+
+class AddUserAskView(View):
+    """
+    添加用户咨询
+    """
+
+    def post(self, request):
+        name = request.POST.get("name", "")
+        mobile = request.POST.get("mobile", "")
+        course_name = request.POST.get("course_name", "")
+        userask_form = UserAskForm(request.POST)
+        if userask_form.is_valid():
+            # modelform调用save方法后，返回一个model类
+            # 设置commit=True,调用save之后，保存到数据库；若不设置或设置为False，不提交到数据库。
+            userask = userask_form.save(commit=True)
+            userask_form.name = name
+            userask_form.mobile = mobile
+            userask_form.course_name = course_name
+
+            return HttpResponse("{'status':'success'}", content_type="application/json")
+        else:
+            return HttpResponse("{'status':'fail','msg':'{0}'}".format(userask_form.errors),
+                                content_type="application/json")
 
 
 class OrgView(View):
