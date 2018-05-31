@@ -23,5 +23,5 @@ class TeacherAdmin(object):
 
 
 xadmin.site.register(CityDict, CityDictAdmin)
-xadmin.site.register(CourseOrg, CityDictAdmin)
-xadmin.site.register(Teacher, CityDictAdmin)
+xadmin.site.register(CourseOrg, CourseOrgAdmin)
+xadmin.site.register(Teacher, TeacherAdmin)
