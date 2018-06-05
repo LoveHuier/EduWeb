@@ -10,8 +10,26 @@ from courses.models import Course
 
 # Create your views here.
 
+class OrgCourseView(View):
+    """
+    机构课程列表页
+    """
+
+    def get(self, request, org_id):
+        current_page = "course"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_courses = course_org.course_set.all()
+
+        return render(request, 'org-detail-course.html', {
+            "course_org": course_org,
+            "all_courses": all_courses,
+            "current_page": current_page,
+        })
+
+
 class OrgHomeView(View):
     def get(self, request, org_id):
+        current_page = "home"
         course_org = CourseOrg.objects.get(id=int(org_id))
         all_courses = course_org.course_set.all()[:3]
         all_teachers = course_org.teacher_set.all()[:3]
@@ -20,6 +38,7 @@ class OrgHomeView(View):
             "course_org": course_org,
             "all_courses": all_courses,
             "all_teachers": all_teachers,
+            "current_page": current_page,
         })
 
 
