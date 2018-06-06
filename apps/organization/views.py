@@ -123,6 +123,7 @@ class OrgView(View):
     """
 
     def get(self, request):
+        current_page = "org"
         all_orgs = CourseOrg.objects.all()
         all_citys = CityDict.objects.all()
 
@@ -166,6 +167,7 @@ class OrgView(View):
             "category": category,
             "hot_orgs": hot_orgs,
             "sort": sort,
+            "current_page": current_page,
         })
 
 

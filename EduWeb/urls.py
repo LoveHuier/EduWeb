@@ -41,7 +41,9 @@ urlpatterns = [
     path("modify_pwd/", ModifyPwdView.as_view(), name="modify_pwd"),
 
     # 课程机构url配置，以org开关的都会去organization.urls中找
-    path("org/", include('organization.urls', namespace="org"))
+    path("org/", include('organization.urls', namespace="org")),
+    # 课程相关url配置
+    path("course/", include('courses.urls', namespace="course"))
 ]
 # 配置上传文件的访问显示
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
