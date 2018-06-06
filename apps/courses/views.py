@@ -11,7 +11,17 @@ from .models import Course
 class CourseListView(View):
     def get(self, request):
         current_page = "open_course"
-        all_courses = Course.objects.all()
+        all_courses = Course.objects.all().order_by("-add_time")
+
+        # 热门课程
+        hot_courses = Course.objects.all().order_by("-click_nums")[:3]
+
+        # 排序
+        sort = request.GET.get("sort", "")
+        if sort == "hot":
+            all_courses = all_courses.order_by("-click_nums")
+        elif sort == "students":
+            all_courses = all_courses.order_by("-students")
 
         # 分页
         try:
@@ -24,4 +34,6 @@ class CourseListView(View):
         return render(request, "course-list.html", {
             "all_courses": courses,
             "current_page": current_page,
+            "sort": sort,
+            "hot_courses": hot_courses,
         })
