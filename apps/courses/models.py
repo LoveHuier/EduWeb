@@ -10,6 +10,7 @@ from organization.models import CourseOrg
 class Course(models.Model):
     course_org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name=u"课程机构", null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name=u"课程名")
+    category = models.CharField(default=u"后端开发", max_length=20, verbose_name=u"课程类别")
     desc = models.CharField(max_length=300, verbose_name=u"课程描述")
     detail = models.TextField(verbose_name=u"课程详情")
     degree = models.CharField(choices=(("cj", "初级"), ("zj", "中级"), ("gj", "高级")), max_length=2, default="cj",
@@ -24,6 +25,20 @@ class Course(models.Model):
     class Meta:
         verbose_name = u"课程"
         verbose_name_plural = verbose_name
+
+    def get_zj_nums(self):
+        """
+        获取章节数
+        :return:
+        """
+        return self.lesson_set.all().count()
+
+    def get_learn_user(self):
+        """
+        获取学习过该课程的用户
+        :return:
+        """
+        return self.usercourse_set.all()[:5]
 
     def __str__(self):
         return self.name
