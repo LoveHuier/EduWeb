@@ -1,6 +1,6 @@
 # _*_coding: utf-8_*_
 from django.urls import path
-from .views import CourseListView, CourseDetailView, CourseInfoView
+from .views import CourseListView, CourseDetailView, CourseInfoView, CommentsView
 
 app_name = "courses"
 
@@ -11,4 +11,6 @@ urlpatterns = [
     path("detail/<int:course_id>/", CourseDetailView.as_view(), name="course_detail"),
     # 课程章节信息页
     path("info/<int:course_id>/", CourseInfoView.as_view(), name="course_info"),
+    # 课程评论
+    path("comment/<int:course_id>/", CommentsView.as_view(), name="course_comment"),
 ]
