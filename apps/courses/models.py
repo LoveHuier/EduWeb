@@ -2,12 +2,13 @@
 from django.db import models
 from datetime import datetime
 
-from organization.models import CourseOrg
+from organization.models import CourseOrg, Teacher
 
 
 # Create your models here.
 
 class Course(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name=u"老师", null=True, blank=True)
     course_org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name=u"课程机构", null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name=u"课程名")
     category = models.CharField(default=u"后端开发", max_length=20, verbose_name=u"课程类别")
@@ -22,6 +23,9 @@ class Course(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
     tag = models.CharField(default="", verbose_name=u"课程标签", max_length=10)
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+
+    youneed_know = models.CharField(max_length=300, verbose_name=u"课程需知", default="")
+    teacher_tell = models.CharField(max_length=300, verbose_name=u"老师提醒", default="")
 
     class Meta:
         verbose_name = u"课程"
