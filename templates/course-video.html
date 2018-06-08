@@ -83,7 +83,8 @@
                                     <ul class="video">
                                         {% for video in lesson.video_set.all %}
                                             <li>
-                                                <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">
+                                                <a target="_blank" href='{{ video.url }}'
+                                                   class="J-media-item studyvideo">
                                                     {{ video.name }}({{ video.learn_times }})
                                                     <i class="study-state"></i>
                                                 </a>
@@ -103,12 +104,13 @@
                             <div class="box mb40">
                                 <h4>资料下载</h4>
                                 <ul class="downlist">
-
-                                    <li>
-                                        <span><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;前端页面</span>
-                                        <a href="../media/course/resource/2016/11/media.zip" class="downcode"
-                                           target="_blank" download="" data-id="274" title="">下载</a>
-                                    </li>
+                                    {% for resource in all_resources %}
+                                        <li>
+                                            <span><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;{{ resource.name }}</span>
+                                            <a href="{{ MEDIA_URL }}{{ resource.download }}" class="downcode"
+                                               target="_blank" download="" data-id="274" title="">下载</a>
+                                        </li>
+                                    {% endfor %}
 
                                 </ul>
                             </div>
