@@ -75,150 +75,24 @@
                         </div>
 
                         <div class="mod-chapters">
+                            {% for lesson in course.lesson_set.all %}
+                                <div class="chapter chapter-active">
+                                    <h3>
+                                        <strong><i class="state-expand"></i>{{ lesson.name }}</strong>
+                                    </h3>
+                                    <ul class="video">
+                                        {% for video in lesson.video_set.all %}
+                                            <li>
+                                                <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">
+                                                    {{ video.name }}({{ video.learn_times }})
+                                                    <i class="study-state"></i>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
 
-                            <div class="chapter chapter-active">
-                                <h3>
-                                    <strong><i class="state-expand"></i>第一章 基础知识</strong>
-                                </h3>
-                                <ul class="video">
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">1.1 hello
-                                            world (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">1.2 基本概念
-                                            (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">django
-                                            settings.py 配置 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <div class="chapter chapter-active">
-                                <h3>
-                                    <strong><i class="state-expand"></i>第二章 进阶开发</strong>
-                                </h3>
-                                <ul class="video">
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">2.1 test
-                                            (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">2.2 test2
-                                            (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <div class="chapter chapter-active">
-                                <h3>
-                                    <strong><i class="state-expand"></i>第三章 需求分析和数据库设计</strong>
-                                </h3>
-                                <ul class="video">
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">3.1 django
-                                            app设计 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">3.2 django
-                                            model设计 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">3.3 django
-                                            users models设计 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">3.4 django
-                                            course models设计 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">3.5
-                                            organization models设计 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <div class="chapter chapter-active">
-                                <h3>
-                                    <strong><i class="state-expand"></i>第四章 django基础知识回顾</strong>
-                                </h3>
-                                <ul class="video">
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">4.1 django
-                                            settings配置 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">4.2
-                                            models设计
-                                            (20)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <div class="chapter chapter-active">
-                                <h3>
-                                    <strong><i class="state-expand"></i>第五章 通过xadmin搭建后台管理系统</strong>
-                                </h3>
-                                <ul class="video">
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">5.1 django
-                                            admin讲解 (10)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href='/video/3662' class="J-media-item studyvideo">5.2
-                                            xadmin的安装和注册 (0)
-                                            <i class="study-state"></i>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
+                            {% endfor %}
 
                         </div>
 
