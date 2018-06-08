@@ -52,11 +52,26 @@ class CourseDetailView(View):
         course.click_nums += 1
         course.save()
 
-        # 相关机构是否已收藏
-        has_fav = UserFavorite.objects.filter(fav_type=2, fav_id=course.course_org.id)
+        # 相关机构与课程是否已收藏
+        has_fav_org = False
+        has_fav_course = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
+                has_fav_course = True
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=course.course_org.id):
+                has_fav_org = True
+
+        # 相关课程推荐
+        tag = course.tag
+        if tag:
+            relate_course = Course.objects.filter(tag=tag)[:1]
+        else:
+            relate_course = [course]
 
         return render(request, "course-detail.html", {
             "course": course,
             "current_page": current_page,
-            "has_fav": has_fav,
+            "has_fav_org": has_fav_org,
+            "has_fav_course": has_fav_course,
+            "relate_course": relate_course,
         })
