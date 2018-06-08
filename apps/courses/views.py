@@ -3,6 +3,7 @@ from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Course
+from operation.models import UserFavorite
 
 
 # Create your views here.
@@ -50,8 +51,12 @@ class CourseDetailView(View):
         # 增加课程点击数
         course.click_nums += 1
         course.save()
-        
+
+        # 相关机构是否已收藏
+        has_fav = UserFavorite.objects.filter(fav_type=2, fav_id=course.course_org.id)
+
         return render(request, "course-detail.html", {
             "course": course,
             "current_page": current_page,
+            "has_fav": has_fav,
         })
