@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
 from .models import Course
 from operation.models import UserFavorite, CourseComments
@@ -94,6 +95,10 @@ class CourseInfoView(View):
 
 
 class CommentsView(View):
+    """
+    课程评论
+    """
+
     def get(self, request, course_id):
         current_page = "open_course"
         course = Course.objects.get(id=int(course_id))
@@ -105,3 +110,27 @@ class CommentsView(View):
             "all_comments": all_comments,
             "all_resources": all_resources,
         })
+
+
+class AddComentsView(View):
+    """
+    添加课程评论
+    """
+
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponse('{"status":"fail","msg":"用户未登录"}', content_type="application/json")
+
+        course_id = int(request.POST.get("course_id", 0))
+        comments = request.POST.get("comments", "")
+        if comments and course_id > 0:
+            course = Course.objects.get(id=course_id)
+            course_comment = CourseComments()
+            course_comment.course = course
+            course_comment.user = request.user
+            course_comment.comments = comments
+            course_comment.save()
+
+            return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
