@@ -103,7 +103,7 @@ class CommentsView(View):
         current_page = "open_course"
         course = Course.objects.get(id=int(course_id))
         all_resources = course.courseresource_set.all()
-        all_comments = CourseComments.objects.all()
+        all_comments = CourseComments.objects.all().order_by("-add_time")
         return render(request, "course-comment.html", {
             "course": course,
             "current_page": current_page,
