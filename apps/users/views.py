@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 # 对密码进行加密
 from django.contrib.auth.hashers import make_password
+from django.http import HttpResponseRedirect
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
@@ -78,7 +79,10 @@ class RegisterView(View):
 class LoginView(View):
     # 一般只用定义get/post这个方法，django会自动判断调用get/post
     def get(self, request):
-        return render(request, "login.html", {})
+        redirect_to = request.GET.get("next", "")
+        return render(request, "login.html", {
+            "redirect_to": redirect_to,
+        })
 
     def post(self, request):
         # 这里LoginForm会对应验证相关的username/password
@@ -90,7 +94,12 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, "index.html")
+                    redirect_to = request.POST.get("next", "")
+                    # 数据中有next，重定向到redirect_to
+                    if redirect_to:
+                        return HttpResponseRedirect(redirect_to)
+                    else:
+                        return render(request, "index.html")
                 else:
                     return render(request, "login.html", {"msg": "用户未激活！"})
             else:

@@ -2,9 +2,10 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Course
-from operation.models import UserFavorite, CourseComments
+from operation.models import UserFavorite, CourseComments, UserCourse
 
 
 # Create your views here.
@@ -78,29 +79,53 @@ class CourseDetailView(View):
         })
 
 
-class CourseInfoView(View):
+class CourseInfoView(LoginRequiredMixin, View):
     """
     课程章节信息
     """
+    login_url = "/login/"
 
     def get(self, request, course_id):
         current_page = "open_course"
         course = Course.objects.get(id=int(course_id))
+
+        # 添加用户学习记录，让用户与课程相关联
+        user_course = UserCourse.objects.filter(user=request.user, course_id=int(course_id))
+        if not user_course:
+            user_course = UserCourse()
+            user_course.user = request.user
+            user_course.course = course
+            user_course.save()
+
+        # 学习该课程的人还学习过的其它课程
+        user_courses = UserCourse.objects.filter(course_id=int(course_id))
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        relate_courses = [user_course.course for user_course in all_user_courses]
+
         all_resources = course.courseresource_set.all()
         return render(request, "course-video.html", {
             "course": course,
             "current_page": current_page,
             "all_resources": all_resources,
+            "relate_courses": set(relate_courses[:3]),
         })
 
 
-class CommentsView(View):
+class CommentsView(LoginRequiredMixin, View):
     """
     课程评论
     """
 
     def get(self, request, course_id):
         current_page = "open_course"
+
+        # 学习该课程的人还学习过的其它课程
+        user_courses = UserCourse.objects.filter(course_id=int(course_id))
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        relate_courses = [user_course.course for user_course in all_user_courses]
+
         course = Course.objects.get(id=int(course_id))
         all_resources = course.courseresource_set.all()
         all_comments = CourseComments.objects.all().order_by("-add_time")
@@ -109,6 +134,7 @@ class CommentsView(View):
             "current_page": current_page,
             "all_comments": all_comments,
             "all_resources": all_resources,
+            "relate_courses": set(relate_courses[:3]),
         })
 
 
