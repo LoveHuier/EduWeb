@@ -1,6 +1,6 @@
 # _*_coding: utf-8_*_
 from django.urls import path
-from .views import CourseListView, CourseDetailView, CourseInfoView, CommentsView, AddComentsView
+from .views import CourseListView, CourseDetailView, CourseInfoView, CommentsView, AddComentsView, VideoPlayView
 
 app_name = "courses"
 
@@ -15,4 +15,6 @@ urlpatterns = [
     path("comment/<int:course_id>/", CommentsView.as_view(), name="course_comment"),
     # 发表评论
     path("add_comment/", AddComentsView.as_view(), name="add_comment"),
+    # 视频播放页面
+    path("video/<int:video_id>/", VideoPlayView.as_view(), name="video_play"),
 ]

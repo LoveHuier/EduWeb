@@ -4,7 +4,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Course
+from .models import Course, Video
 from operation.models import UserFavorite, CourseComments, UserCourse
 
 
@@ -89,6 +89,9 @@ class CourseInfoView(LoginRequiredMixin, View):
         current_page = "open_course"
         course = Course.objects.get(id=int(course_id))
 
+        course.students += 1
+        course.save()
+
         # 添加用户学习记录，让用户与课程相关联
         user_course = UserCourse.objects.filter(user=request.user, course_id=int(course_id))
         if not user_course:
@@ -109,6 +112,41 @@ class CourseInfoView(LoginRequiredMixin, View):
             "current_page": current_page,
             "all_resources": all_resources,
             "relate_courses": set(relate_courses[:3]),
+        })
+
+
+class VideoPlayView(View):
+    """
+        视频播放页面
+    """
+    login_url = "/login/"
+
+    def get(self, request, video_id):
+        current_page = "open_course"
+        video = Video.objects.get(id=int(video_id))
+        course = video.lesson.course
+
+        # 添加用户学习记录，让用户与课程相关联
+        user_course = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_course:
+            user_course = UserCourse()
+            user_course.user = request.user
+            user_course.course = course
+            user_course.save()
+
+        # 学习该课程的人还学习过的其它课程
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        relate_courses = [user_course.course for user_course in all_user_courses]
+
+        all_resources = course.courseresource_set.all()
+        return render(request, "course-play.html", {
+            "course": course,
+            "current_page": current_page,
+            "all_resources": all_resources,
+            "relate_courses": set(relate_courses[:3]),
+            "video": video,
         })
 
 
