@@ -2,7 +2,8 @@
 
 from django.urls import path
 
-from .views import OrgView, AddUserAskView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView, AddFavView
+from .views import OrgView, AddUserAskView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, \
+    TeacherListView, TeacherDetailView
 
 app_name = "organization"
 urlpatterns = [
@@ -21,4 +22,9 @@ urlpatterns = [
 
     # 机构收藏
     path("add_fav/", AddFavView.as_view(), name="add_fav"),
+
+    # 讲师列表
+    path("teacher/list/", TeacherListView.as_view(), name="teacher_list"),
+    # 讲师详情页
+    path("teacher/detail/<int:teacher_id>/", TeacherDetailView.as_view(), name="teacher_detail"),
 ]

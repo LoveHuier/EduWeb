@@ -201,3 +201,53 @@ class AddFavView(View):
                 return HttpResponse('{"status":"success", "msg":"已收藏"}', content_type='application/json')
             else:
                 return HttpResponse('{"status":"fail", "msg":"收藏出错！"}', content_type='application/json')
+
+
+class TeacherListView(View):
+    def get(self, request):
+        current_page = "teachers"
+        all_teachers = Teacher.objects.all()
+
+        teacher_nums = all_teachers.count()
+
+        hot_teachers = all_teachers.order_by("-click_nums")[:3]
+
+        sort = request.GET.get("sort", "")
+        if sort == "hot":
+            all_teachers = all_teachers.order_by("-click_nums")
+
+        # 分页功能
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(all_teachers, 4, request=request)  # 一定要加上每页个数。
+        teachers = p.page(page)
+
+        return render(request, "teachers-list.html", {
+            "current_page": current_page,
+            "all_teachers": teachers,
+            "teacher_nums": teacher_nums,
+            "hot_teachers": hot_teachers,
+            "sort": sort,
+        })
+
+
+class TeacherDetailView(View):
+    def get(self, request, teacher_id):
+        current_page = "teachers"
+        teacher = Teacher.objects.get(id=int(teacher_id))
+
+        all_teachers = Teacher.objects.all()
+        hot_teachers = all_teachers.order_by("-click_nums")[:3]
+
+        all_courses = teacher.course_set.all()
+        if not all_courses:
+            all_courses = []
+
+        return render(request, "teacher-detail.html", {
+            "current_page": current_page,
+            "teacher": teacher,
+            "hot_teachers": hot_teachers,
+            "all_courses": all_courses,
+        })

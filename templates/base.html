@@ -20,19 +20,19 @@
             {% if request.user.is_authenticated %}
                 <div class="top">
                     <div class="wp">
-                        <div class="fl"><p>服务电话：<b>33333333</b></p></div>
+                        <div class="fl"><p>服务电话：<b>139xxxxxxxx</b></p></div>
                         <!--登录后跳转-->
                         <div class="personal">
                             <dl class="user fr">
                                 <dd>{{ request.user.username }}<img class="down fr"
                                                                     src="{% static 'images/top_down.png' %}"/></dd>
                                 <dt><img width="20" height="20"
-                                         src="{% static 'media/image/2016/12/default_big_14.png' %}"/></dt>
+                                         src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                             </dl>
                             <div class="userdetail">
                                 <dl>
                                     <dt><img width="80" height="80"
-                                             src="{% static 'media/image/2016/12/default_big_14.png' %}"/></dt>
+                                             src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                                     <dd>
                                         <h2>django</h2>
                                         <p>{{ request.user.username }}</p>
@@ -82,14 +82,14 @@
                 <div class="nav">
                     <div class="wp">
                         <ul>
-                            <li class="{% if current_page == "" %}active{% endif %}"><a href="index.html">首页</a></li>
+                            <li class="{% if current_page == "" %}active{% endif %}"><a href="{% url 'index' %}">首页</a></li>
                             <li class="{% if current_page == "open_course" %}active{% endif %}">
                                 <a href="{% url 'course:course_list' %}">
                                     公开课<img class="hot" src="{% static 'images/nav_hot.png' %}">
                                 </a>
                             </li>
-                            <li>
-                                <a href="teachers-list.html">授课教师</a>
+                            <li class="{% if current_page == "teachers" %}active{% endif %}">
+                                <a href="{% url 'teacher:teacher_list' %}">授课教师</a>
                             </li>
                             <li class="{% if current_page == "org" %}active{% endif %}"><a
                                     href="{% url 'org:org_list' %}">授课机构</a></li>
