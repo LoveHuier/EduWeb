@@ -3,6 +3,7 @@ from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from .models import Course, Video
 from operation.models import UserFavorite, CourseComments, UserCourse
@@ -18,6 +19,12 @@ class CourseListView(View):
 
         # 热门课程
         hot_courses = Course.objects.all().order_by("-click_nums")[:3]
+
+        # 课程搜索
+        search_key = request.GET.get("keywords", "")
+        if search_key:
+            all_courses = all_courses.filter(
+                Q(name__icontains=search_key) | Q(desc__icontains=search_key) | Q(detail__icontains=search_key))
 
         # 排序
         sort = request.GET.get("sort", "")

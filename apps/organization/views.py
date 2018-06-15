@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import CourseOrg, CityDict, Teacher
 from .forms import UserAskForm
@@ -135,6 +136,12 @@ class OrgView(View):
         if city_id:
             all_orgs = all_orgs.filter(city_id=int(city_id))
 
+        # 机构搜索
+        search_key = request.GET.get("keywords", "")
+        if search_key:
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_key) | Q(desc__icontains=search_key))
+
         # 机构类别筛选功能
         category = request.GET.get("ct", "")
         if category:
@@ -211,6 +218,10 @@ class TeacherListView(View):
         teacher_nums = all_teachers.count()
 
         hot_teachers = all_teachers.order_by("-click_nums")[:3]
+
+        search_key = request.GET.get("keywords", "")
+        if search_key:
+            all_teachers = all_teachers.filter(name__icontains=search_key)
 
         sort = request.GET.get("sort", "")
         if sort == "hot":
