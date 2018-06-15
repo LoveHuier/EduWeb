@@ -44,8 +44,10 @@ urlpatterns = [
     path("org/", include('organization.urls', namespace="org")),
     # 课程相关url配置
     path("course/", include('courses.urls', namespace="course")),
-    # 课程相关url配置
+    # 讲师相关url配置
     path("teacher/", include('organization.urls', namespace="teacher")),
+    # 用户中心相关url配置
+    path("users/", include('users.urls', namespace="users")),
 ]
 # 配置上传文件的访问显示
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

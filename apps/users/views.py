@@ -9,6 +9,7 @@ from django.views.generic.base import View
 # 对密码进行加密
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
@@ -166,3 +167,13 @@ class ModifyPwdView(View):
         else:
             email = request.POST.get("email", "")
             return render(request, "password_reset.html", {"email": email, "msg": ""})
+
+
+class UserInfoView(LoginRequiredMixin, View):
+    """
+    用户个人信息
+    """
+    login_url="/login/"
+
+    def get(self, request):
+        return render(request, "usercenter-info.html", {})
