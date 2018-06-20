@@ -8,11 +8,11 @@ from django.db.models import Q
 from django.views.generic.base import View
 # 对密码进行加密
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
 from utils.email_send import send_register_email
 
 
@@ -173,7 +173,28 @@ class UserInfoView(LoginRequiredMixin, View):
     """
     用户个人信息
     """
-    login_url="/login/"
+    login_url = "/login/"
 
     def get(self, request):
         return render(request, "usercenter-info.html", {})
+
+
+class UploadImageView(LoginRequiredMixin, View):
+    """
+    用户修改头像
+    """
+    login_url = "/login/"
+
+    def post(self, request):
+        # upload_form = UploadImageForm(request.POST, request.FILES)
+        # if upload_form.is_valid():
+        #     image = upload_form.cleaned_data['image']
+        #     request.user.image = image
+        #     request.user.save()
+        # 若想upload_form既用model，又有form的功能，则需要传入一个instance，指明当前实例
+        upload_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        if upload_form.is_valid():
+            upload_form.save()
+            return HttpResponse('{"status":"success"}', content_type="application/json")
+        else:
+            return HttpResponse('{"status":"fail"}', content_type="application/json")
