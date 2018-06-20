@@ -2,7 +2,7 @@
 
 from django.urls import path, include
 
-from .views import UserInfoView, UploadImageView
+from .views import UserInfoView, UploadImageView, UpdatePwdView
 
 app_name = "users"
 urlpatterns = [
@@ -10,4 +10,6 @@ urlpatterns = [
     path("info/", UserInfoView.as_view(), name="user_info"),
     # 用户头像上传
     path("image/upload/", UploadImageView.as_view(), name="image_upload"),
+    # 个人中心修改密码
+    path("update/pwd/", UpdatePwdView.as_view(), name="update_pwd"),
 ]
