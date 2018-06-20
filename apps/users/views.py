@@ -1,4 +1,4 @@
-import json
+import json, re
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 # 引入原始的认证类
@@ -11,6 +11,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from  django.contrib.auth import logout
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
@@ -82,6 +83,12 @@ class LoginView(View):
     # 一般只用定义get/post这个方法，django会自动判断调用get/post
     def get(self, request):
         redirect_to = request.GET.get("next", "")
+        if not redirect_to:
+            # 获取上一个页面的url
+            http_referer = request.META["HTTP_REFERER"]  # http://127.0.0.1:8000/course/list/
+            regex = 'http://.*?(/.*)'
+            referer_url = re.findall(regex, http_referer)[0]
+            redirect_to = referer_url
         return render(request, "login.html", {
             "redirect_to": redirect_to,
         })
@@ -101,7 +108,7 @@ class LoginView(View):
                     if redirect_to:
                         return HttpResponseRedirect(redirect_to)
                     else:
-                        return render(request, "index.html")
+                        return HttpResponseRedirect("/")
                 else:
                     return render(request, "login.html", {"msg": "用户未激活！"})
             else:
@@ -220,3 +227,13 @@ class UpdatePwdView(View):
             return HttpResponse('{"status":"success"}', content_type="application/json")
         else:
             return HttpResponse(json.dumps(modify_form.errors), content_type="application/json")
+
+
+class LogoutView(LoginRequiredMixin, View):
+    """
+    退出函数
+    """
+
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect("/")

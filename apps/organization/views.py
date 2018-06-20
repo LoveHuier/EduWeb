@@ -257,12 +257,12 @@ class TeacherDetailView(View):
             all_courses = []
 
         has_teacher_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_id=int(teacher_id), fav_type=3):
-            has_teacher_fav = True
-
         has_org_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_id=int(teacher.org_id), fav_type=2):
-            has_org_fav = True
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(teacher_id), fav_type=3):
+                has_teacher_fav = True
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(teacher.org_id), fav_type=2):
+                has_org_fav = True
 
         return render(request, "teacher-detail.html", {
             "current_page": current_page,
