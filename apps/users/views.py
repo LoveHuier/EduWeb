@@ -14,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from  django.contrib.auth import logout
 
 from .models import UserProfile, EmailVerifyRecord
+from operation.models import UserCourse
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
 from utils.email_send import send_register_email
 
@@ -282,3 +283,16 @@ class UpdateEmailView(LoginRequiredMixin, View):
             return HttpResponse('{"status":"success"}', content_type="application/json")
         else:
             return HttpResponse('{"email":"验证码出错"}', content_type="application/json")
+
+
+class MyCourseView(LoginRequiredMixin, View):
+    """
+    我的课程
+    """
+    login_url = "/login/"
+
+    def get(self, request):
+        usercourses = UserCourse.objects.filter(user=request.user)
+        return render(request, "usercenter-mycourse.html", {
+            "usercourses": usercourses,
+        })
