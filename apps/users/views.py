@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from  django.contrib.auth import logout
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
 from utils.email_send import send_register_email
 
 
@@ -185,6 +185,14 @@ class UserInfoView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, "usercenter-info.html", {})
+
+    def post(self, request):
+        user_info_form = UserInfoForm(request.POST, instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse('{"status":"success"}', content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors), content_type="application/json")
 
 
 class UploadImageView(LoginRequiredMixin, View):
