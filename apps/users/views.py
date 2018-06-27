@@ -233,7 +233,44 @@ class LogoutView(LoginRequiredMixin, View):
     """
     退出函数
     """
+    login_url = "/login/"
 
     def get(self, request):
         logout(request)
         return HttpResponseRedirect("/")
+
+
+class SendEmailCodeView(LoginRequiredMixin, View):
+    """
+    发送邮箱验证码
+    """
+    login_url = "/login/"
+
+    def get(self, request):
+        email = request.GET.get("email", "")
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse('{"email":"邮箱已经存在"}', content_type="application/json")
+
+        send_register_email(email, "update_email")
+        return HttpResponse('{"status":"success"}', content_type="application/json")
+
+
+class UpdateEmailView(LoginRequiredMixin, View):
+    """
+    修改邮箱
+    """
+    login_url = "/login/"
+
+    def post(self, request):
+        email = request.POST.get("email", "")
+        code = request.POST.get("code", "")
+
+        existed_records = EmailVerifyRecord.objects.filter(email=email, code=code, send_type="update_email")
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+
+            return HttpResponse('{"status":"success"}', content_type="application/json")
+        else:
+            return HttpResponse('{"email":"验证码出错"}', content_type="application/json")

@@ -18,7 +18,10 @@ def random_str(randomlength=8):
 
 
 def send_register_email(email, send_type="register"):
-    code = random_str(12)
+    if send_type == "update_email":
+        code = random_str(4)
+    else:
+        code = random_str(12)
 
     email_record = EmailVerifyRecord()
     email_record.code = code
@@ -41,6 +44,14 @@ def send_register_email(email, send_type="register"):
     elif send_type == "forget":
         email_title = "自学网密码重置链接"
         email_body = "请点击下面的链接重置密码：http://127.0.0.1:8000/reset/{code}".format(code=code)
+
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+
+        if send_status:
+            pass
+    elif send_type == "update_email":
+        email_title = "自学网邮箱修改验证码"
+        email_body = "你的验证码为：{code}".format(code=code)
 
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
 

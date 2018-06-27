@@ -2,7 +2,7 @@
 
 from django.urls import path, include
 
-from .views import UserInfoView, UploadImageView, UpdatePwdView, LogoutView
+from .views import UserInfoView, UploadImageView, UpdatePwdView, LogoutView, SendEmailCodeView, UpdateEmailView
 
 app_name = "users"
 urlpatterns = [
@@ -13,5 +13,9 @@ urlpatterns = [
     # 个人中心修改密码
     path("update/pwd/", UpdatePwdView.as_view(), name="update_pwd"),
     # 登出
-    path("logout/", LogoutView.as_view(), name="logout")
+    path("logout/", LogoutView.as_view(), name="logout"),
+    # 发送邮箱验证码
+    path("sendemail_code/", SendEmailCodeView.as_view(), name="sendemail_code"),
+    # 修改邮箱
+    path("update_email/", UpdateEmailView.as_view(), name="update_email"),
 ]
