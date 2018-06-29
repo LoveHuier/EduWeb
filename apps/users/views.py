@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from  django.contrib.auth import logout
 
 from .models import UserProfile, EmailVerifyRecord
-from operation.models import UserCourse, UserFavorite
+from operation.models import UserCourse, UserFavorite, UserMessage
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
 from utils.email_send import send_register_email
 from organization.models import CourseOrg, Teacher
@@ -348,4 +348,17 @@ class MyFavCourseView(LoginRequiredMixin, View):
             fav_course_list.append(Course.objects.get(id=fav_course.fav_id))
         return render(request, "usercenter-fav-course.html", {
             "fav_course_list": fav_course_list,
+        })
+
+
+class MessageView(LoginRequiredMixin, View):
+    """
+    我的消息
+    """
+    login_url = "/login/"
+
+    def get(self, request):
+        all_message = UserMessage.objects.all()
+        return render(request, "usercenter-message.html", {
+            "all_message": all_message,
         })
