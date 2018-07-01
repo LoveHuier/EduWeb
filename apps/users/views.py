@@ -74,6 +74,12 @@ class RegisterView(View):
 
             user_profile.save()
 
+            # 给用户发私信
+            user_message = UserMessage()
+            user_message.user = user_profile.id
+            user_message.message = "恭喜{u_name}，注册成功！".format(u_name=user_name)
+            user_message.save()
+
             # 发送激活邮件
             send_register_email(user_name, "register")
 
@@ -358,7 +364,7 @@ class MessageView(LoginRequiredMixin, View):
     login_url = "/login/"
 
     def get(self, request):
-        all_message = UserMessage.objects.all()
+        all_message = UserMessage.objects.filter(user=request.user.id)
         return render(request, "usercenter-message.html", {
             "all_message": all_message,
         })
