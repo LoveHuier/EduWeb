@@ -254,7 +254,8 @@ class LogoutView(LoginRequiredMixin, View):
 
     def get(self, request):
         logout(request)
-        return HttpResponseRedirect("/")
+        from django.urls import reverse
+        return HttpResponseRedirect(reverse("index"))
 
 
 class SendEmailCodeView(LoginRequiredMixin, View):
@@ -364,7 +365,22 @@ class MessageView(LoginRequiredMixin, View):
     login_url = "/login/"
 
     def get(self, request):
-        all_message = UserMessage.objects.filter(user=request.user.id)
+        all_message = UserMessage.objects.all()
         return render(request, "usercenter-message.html", {
             "all_message": all_message,
+        })
+
+
+class ReadMsgView(LoginRequiredMixin, View):
+    """
+    读取消息
+    """
+    login_url = "/login/"
+
+    def get(self, request, msg_id):
+        user_message = UserMessage.objects.get(user=request.user.id, id=msg_id)
+        user_message.has_read = True
+        user_message.save()
+        return render(request, 'read_message.html', {
+            "user_message": user_message,
         })

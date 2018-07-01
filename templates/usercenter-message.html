@@ -9,7 +9,7 @@
         <div class="wp">
             <ul class="crumbs">
                 <li><a href="{% url 'index' %}">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
                 <li>我的消息</li>
             </ul>
         </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="messagelist">
                 {% for message in all_message %}
-                    <div class="messages">
+                    <div class="messages"><a href="{% url 'users:read_msg' message.id %}">
                         <div class="fr">
                             <div class="top"><span class="fl time">{{ message.add_time }}</span><span
                                     class="fr btn foldbtn"></span></div>
@@ -42,6 +42,7 @@
                                 {{ message.message }}
                             </p>
                         </div>
+                    </a>
                     </div>
                 {% endfor %}
             </div>

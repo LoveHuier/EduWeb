@@ -1,0 +1,11 @@
+{% extends 'usercenter-base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}消息详情 - 自学网{% endblock %}
+
+{% block custom_bread %}{% endblock %}
+
+{% block content_right %}
+    <p>{{ user_message.message }}</p>
+{% endblock %}

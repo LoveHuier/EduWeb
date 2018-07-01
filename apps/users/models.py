@@ -20,6 +20,12 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_unread_nums(self):
+        # 获取用户未读取消息的数量
+        from operation.models import UserMessage
+        # 这个from必须放在这里，而不能放到顶部，否则就会和operation.models中形成循环调用
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
+
 
 class EmailVerifyRecord(models.Model):
     """
