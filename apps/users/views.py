@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from  django.contrib.auth import logout
 
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 from operation.models import UserCourse, UserFavorite, UserMessage
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
 from utils.email_send import send_register_email
@@ -383,4 +383,20 @@ class ReadMsgView(LoginRequiredMixin, View):
         user_message.save()
         return render(request, 'read_message.html', {
             "user_message": user_message,
+        })
+
+
+class IndexView(View):
+    """
+    首页
+    """
+
+    def get(self, request):
+        all_banners = Banner.objects.all().order_by("index")
+        all_courses = Course.objects.all()
+        all_orgs = CourseOrg.objects.all()
+        return render(request, 'index.html', {
+            "all_courses": all_courses,
+            "all_orgs": all_orgs,
+            "all_banners": all_banners,
         })

@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 import xadmin
 
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, IndexView
 from organization.views import OrgView
 from EduWeb.settings import MEDIA_ROOT, MEDIA_URL
 from django.conf.urls.static import static
@@ -27,7 +27,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     # 调用TemplateView类的as_view方法，会自动转化一个view的函数过来，并在template_name参数指定文件即可，不用自己写一个view类
-    path("", TemplateView.as_view(template_name="index.html"), name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("login/", LoginView.as_view(), name="login"),
     path("register/", RegisterView.as_view(), name="register"),
 
