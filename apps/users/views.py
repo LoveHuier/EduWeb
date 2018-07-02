@@ -393,10 +393,12 @@ class IndexView(View):
 
     def get(self, request):
         all_banners = Banner.objects.all().order_by("index")
-        all_courses = Course.objects.all()
-        all_orgs = CourseOrg.objects.all()
+        all_courses = Course.objects.filter(is_banner=False).order_by("-add_time")[:6]
+        banner_courses = Course.objects.filter(is_banner=False).order_by("-add_time")[:3]
+        all_orgs = CourseOrg.objects.all()[:15]
         return render(request, 'index.html', {
             "all_courses": all_courses,
             "all_orgs": all_orgs,
             "all_banners": all_banners,
+            "banner_courses": banner_courses,
         })

@@ -23,6 +23,7 @@ class Course(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
     tag = models.CharField(default="", verbose_name=u"课程标签", max_length=10)
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    is_banner = models.BooleanField(default=False, verbose_name=u"是否轮播")
 
     youneed_know = models.CharField(max_length=300, verbose_name=u"课程需知", default="")
     teacher_tell = models.CharField(max_length=300, verbose_name=u"老师提醒", default="")
