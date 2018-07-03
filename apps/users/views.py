@@ -11,6 +11,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render_to_response
 from  django.contrib.auth import logout
 
 from .models import UserProfile, EmailVerifyRecord, Banner
@@ -402,3 +403,18 @@ class IndexView(View):
             "all_banners": all_banners,
             "banner_courses": banner_courses,
         })
+
+
+# def page_not_found(request):
+#     """
+#     全局404处理函数
+#     :param request:接收一个request参数
+#     :return:
+#     """
+#     response = render_to_response('404.html', {})
+#     response.status_code = 404
+#     return response
+#
+#
+# def server_error(request):
+#     return render_to_response('500.html')
