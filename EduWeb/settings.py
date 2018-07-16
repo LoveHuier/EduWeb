@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '=^5j2w^fif@#0zhx&+z*%utm5#-z6p0nfcit(lsdmfbvfbjaz_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # 生产环境中，必须设置为False，否则出错会暴露出许多信息
+DEBUG = True  # 生产环境中，必须设置为False，否则出错会暴露出许多信息
 
 ALLOWED_HOSTS = ['*']  # 设置DEBUG为False时，必须设置ALLOWED_HOSTS， *表示允许所有ip地址访问
 

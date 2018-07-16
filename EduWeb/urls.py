@@ -51,3 +51,5 @@ urlpatterns = [
 ]
 # 配置上传文件的访问显示
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+
+from django.conf.urls import handler404
