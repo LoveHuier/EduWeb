@@ -1,7 +1,7 @@
 # _*_coding: utf-8_*_
 import xadmin
 
-from .models import Course, Lesson, Video, CourseResource
+from .models import Course, Lesson, Video, CourseResource, BannerCourse
 
 
 class LessonInline(object):
@@ -23,6 +23,26 @@ class CourseAdmin(object):
 
     inlines = [LessonInline, CourseResourceInline]
 
+    def queryset(self):
+        qs = super(CourseAdmin, self).queryset()
+        qs = qs.filter(is_banner=False)
+        return qs
+
+
+class BannerCourseAdmin(object):
+    list_display = ("name", "desc", "detail", "degree", "students", "learn_times")
+    search_fields = ("name", "desc", "detail", "degree", "students")
+    list_filter = ("name", "desc", "detail", "degree", "students", "learn_times")
+    ordering = ['-students']
+    readonly_fields = ['students', 'learn_times']
+
+    inlines = [LessonInline, CourseResourceInline]
+
+    def queryset(self):
+        qs = super(BannerCourseAdmin, self).queryset()
+        qs = qs.filter(is_banner=True)
+        return qs
+
 
 class LessonAdmin(object):
     list_display = ("course", "name", "add_time")
@@ -43,6 +63,7 @@ class CourseResourceAdmin(object):
 
 
 xadmin.site.register(Course, CourseAdmin)
+xadmin.site.register(BannerCourse, BannerCourseAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
