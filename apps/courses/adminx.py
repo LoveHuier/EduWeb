@@ -8,6 +8,8 @@ class CourseAdmin(object):
     list_display = ("name", "desc", "detail", "degree", "students", "learn_times")
     search_fields = ("name", "desc", "detail", "degree", "students")
     list_filter = ("name", "desc", "detail", "degree", "students", "learn_times")
+    ordering = ['-students']
+    readonly_fields = ['students', 'learn_times']
 
 
 class LessonAdmin(object):

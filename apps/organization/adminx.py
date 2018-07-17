@@ -14,6 +14,7 @@ class CourseOrgAdmin(object):
     list_display = ("city", "name", "desc", "click_nums", "fav_nums", "add_time")
     search_fields = ("city", "name", "desc", "click_nums", "fav_nums")
     list_filter = ("city", "name", "desc", "click_nums", "fav_nums", "add_time")
+    relfield_style = 'fk-ajax'
 
 
 class TeacherAdmin(object):
