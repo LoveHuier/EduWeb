@@ -39,6 +39,14 @@ class Course(models.Model):
         """
         return self.lesson_set.all().count()
 
+    get_zj_nums.short_description = "章节数"
+
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='http://www.baidu.com'>跳转</a>")
+
+    go_to.short_description = "跳转"
+
     def get_learn_user(self):
         """
         获取学习过该课程的用户
@@ -57,7 +65,6 @@ class BannerCourse(Course):
 
         # proxy不设置值时，会再生成一张表；为True时，则不生成新表，也具有model的功能。
         proxy = True
-
 
 
 class Lesson(models.Model):
