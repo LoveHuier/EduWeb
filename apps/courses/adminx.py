@@ -29,6 +29,18 @@ class CourseAdmin(object):
         qs = qs.filter(is_banner=False)
         return qs
 
+    def save_models(self):
+        """
+        在保存课程的时候，统计课程机构的课程数
+        :return:
+        """
+        obj = self.new_obj  # 通过new_obj参数可取出当前对象
+        obj.save()  # 保存当前添加的课程，防止统计数量出错
+        if obj.course_org is not None:
+            course_org = obj.course_org
+            course_org.course_nums = Course.objects.filter(course_org=course_org).count()
+            course_org.save()
+
 
 class BannerCourseAdmin(object):
     list_display = ("name", "desc", "detail", "degree", "students", "learn_times")
