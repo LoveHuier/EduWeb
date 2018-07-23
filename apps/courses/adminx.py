@@ -21,6 +21,7 @@ class CourseAdmin(object):
     ordering = ['-students']
     readonly_fields = ['students', 'learn_times']
     list_editable = ["degree", "desc"]
+    style_fields = {"detail": "ueditor"}
 
     inlines = [LessonInline, CourseResourceInline]
 

@@ -48,6 +48,8 @@ urlpatterns = [
     path("teacher/", include('organization.urls', namespace="teacher")),
     # 用户中心相关url配置
     path("users/", include('users.urls', namespace="users")),
+    # 富文本相关url
+    path("ueditor/", include('DjangoUeditor.urls')),
 ]
 # 配置上传文件的访问显示
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
